@@ -2,6 +2,9 @@
   <dictionary name="Brand">
     <words>
       <w>reddit</w>
+      <w>richtext</w>
+      <w>selftext</w>
+      <w>subreddit</w>
     </words>
   </dictionary>
 </component>
