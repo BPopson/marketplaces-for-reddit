@@ -1,3 +1,5 @@
+import string
+
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 
@@ -22,3 +24,37 @@ class Listing(models.Model):
     subreddit_name_prefixed = models.CharField(max_length=50)
     title = models.CharField(max_length=300)
     url = models.CharField(max_length=300)
+
+    def get_wants(self):
+        title = self.title.upper()
+        have_location = title.find('[H]')
+        want_location = title.find('[W]')
+
+        if have_location == -1 or want_location == -1:
+            return 'N/A'
+        elif have_location > want_location:
+            return self.title[want_location:have_location]
+        else:
+            return self.title[want_location:]
+
+    def get_has(self):
+        title = self.title.upper()
+        have_location = title.find('[H]')
+        want_location = title.find('[W]')
+
+        if have_location == -1 or want_location == -1:
+            return 'N/A'
+        elif have_location > want_location:
+            return self.title[have_location:]
+        else:
+            return self.title[have_location:want_location]
+
+    def get_location(self):
+        title = self.title.upper()
+        location_start = title.find('[')
+        location_end = title.find(']')
+
+        if location_start == -1 or location_end == -1:
+            return 'N/A'
+        else:
+            return self.title[location_start:location_end+1]
