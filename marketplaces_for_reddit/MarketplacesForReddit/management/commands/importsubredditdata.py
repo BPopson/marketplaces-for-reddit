@@ -55,7 +55,7 @@ class Command(BaseCommand):
         elif option_sort_by == 'controversial':
             submissions = subreddit.controversial(limit=limit)
         elif option_sort_by == 'top':
-            submissions = subreddit.controversial(limit=limit)
+            submissions = subreddit.top(limit=limit)
         elif option_sort_by == 'rising':
             submissions = subreddit.rising(limit=limit)
         else:
