@@ -39,7 +39,7 @@ class Command(BaseCommand):
         option_client_secret = options['reddit_api_secret'][0]
         option_subreddit = options['subreddit'][0]
         option_limit = options['limit'][0]
-        option_sort_by = options['sort_by'][0]
+        option_sort_by = options['sort_by']
 
         reddit = praw.Reddit(client_id=option_client_id,
                              client_secret=option_client_secret,
