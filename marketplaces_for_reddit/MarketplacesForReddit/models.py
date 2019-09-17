@@ -58,3 +58,15 @@ class Listing(models.Model):
             return 'N/A'
         else:
             return self.title[location_start:location_end+1]
+
+    def get_number_of_trades(self):
+        if self.author_flair_text is None:
+            return 0
+
+        trades_text = self.author_flair_text.upper()
+        trades_text_location = trades_text.find('TRADES:')
+
+        if trades_text_location == -1:
+            return 'N/A: Invalid Flair Text'
+        else:
+            return self.author_flair_text[7:]
