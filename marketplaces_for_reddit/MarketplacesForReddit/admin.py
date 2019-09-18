@@ -4,7 +4,7 @@ from .models import Listing
 
 
 class ListingAdmin(admin.ModelAdmin):
-    list_display = ('title', 'created_utc', 'link_flair_text', 'subreddit_name_prefixed', 'get_wants', 'get_has', 'get_location')
+    list_display = ('title', 'created_utc', 'link_flair_text', 'subreddit_name_prefixed', 'get_wants', 'get_has', 'get_location', 'get_number_of_trades')
     list_filter = ['link_flair_text', 'created_utc']
     search_fields = ['title']
 
