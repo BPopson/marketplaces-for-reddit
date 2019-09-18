@@ -7,6 +7,6 @@ def index(request):
 
     context = {
         'test': "Hello, world. You're at the Marketplaces For Reddit index.",
-        'listings': listings[0:5]
+        'listings': listings[0:15]
     }
     return render(request, 'home/index.html', context)
