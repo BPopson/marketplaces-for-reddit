@@ -4,7 +4,7 @@ from pprint import pprint
 import praw
 
 from django.core.management.base import BaseCommand
-from MarketplacesForReddit.models import Listing
+from MarketplacesForReddit.models import Listing, ParsedListing
 
 
 class Command(BaseCommand):
@@ -64,6 +64,7 @@ class Command(BaseCommand):
         for submission in submissions:
             pprint(vars(submission))
             listing = Listing()
+            parsed_listing = ParsedListing()
             listing.id = submission.id
             listing.author = submission.author.name
             listing.author_flair_text = submission.author_flair_text
@@ -82,8 +83,16 @@ class Command(BaseCommand):
             listing.subreddit_name_prefixed = submission.subreddit_name_prefixed
             listing.title = submission.title
             listing.url = submission.url
+            parsed_listing.id = listing
+            if (len(listing.get_location()) > 10):
+                parsed_listing.location = 'Invalid'
+            else:
+                parsed_listing.location = listing.get_location()
+            parsed_listing.has = listing.get_has()
+            parsed_listing.wants = listing.get_wants()
             pprint(vars(listing))
             listing.save()
+            parsed_listing.save()
 
 
 def get_date(created):
