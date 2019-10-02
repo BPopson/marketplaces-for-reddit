@@ -1,9 +1,10 @@
+import re
 from datetime import datetime
 from pprint import pprint
 
 import praw
-
 from django.core.management.base import BaseCommand
+
 from MarketplacesForReddit.models import Listing, ParsedListing
 
 
@@ -88,10 +89,10 @@ class Command(BaseCommand):
             # We can assume the parsed location is invalid
             # because the default format is supposed to be 
             # [USA-XX] or [XXX] if outside the US
-            if (len(listing.get_location()) > 10):
-                parsed_listing.location = 'Invalid'
-            else:
+            if re.match(r'\[([a-zA-Z]{3}|USA-[a-zA-Z]{2})\]', listing.get_location()) is not None:
                 parsed_listing.location = listing.get_location()
+            else:
+                parsed_listing.location = 'Invalid'
 
             parsed_listing.has = listing.get_has()
             parsed_listing.wants = listing.get_wants()
@@ -103,4 +104,3 @@ class Command(BaseCommand):
 
 def get_date(created):
     return datetime.fromtimestamp(created)
-
