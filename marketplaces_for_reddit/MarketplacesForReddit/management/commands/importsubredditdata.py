@@ -62,7 +62,7 @@ class Command(BaseCommand):
             submissions = subreddit.top(limit=limit)
 
         for submission in submissions:
-            pprint(vars(submission))
+            # pprint(vars(submission))
             listing = Listing()
             parsed_listing = ParsedListing()
             listing.id = submission.id
@@ -84,13 +84,19 @@ class Command(BaseCommand):
             listing.title = submission.title
             listing.url = submission.url
             parsed_listing.id = listing
+
+            # We can assume the parsed location is invalid
+            # because the default format is supposed to be 
+            # [USA-XX] or [XXX] if outside the US
             if (len(listing.get_location()) > 10):
                 parsed_listing.location = 'Invalid'
             else:
                 parsed_listing.location = listing.get_location()
+
             parsed_listing.has = listing.get_has()
             parsed_listing.wants = listing.get_wants()
-            pprint(vars(listing))
+            # pprint(vars(listing))
+            # pprint(vars(parsed_listing))
             listing.save()
             parsed_listing.save()
 
