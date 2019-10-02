@@ -72,9 +72,34 @@
                     </div>
                 </div>
                 <div class="col-sm">
+                        <label for="listing-type">Payment Type:</label>
+                        <div id="listing-type">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="listing-type" id="listing-payment-paypal" value="selling" checked>
+                                <label class="form-check-label" for="listing-payment-paypal">
+                                    PayPal
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="listing-type" id="listing-payment-localcash" value="buying">
+                                <label class="form-check-label" for="listing-payment-localcash">
+                                    Local Cash
+                                </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" name="listing-type" id="listing-payment-other" value="trading">
+                              <label class="form-check-label" for="listing-payment-other">
+                                  Other
+                              </label>
+                            </div>
+                        </div>
+                    </div>
+                <div class="col-sm">
                     <label for="date-range">Location:</label>
                     <select class="custom-select" id="date-range">
-                        <option value="1">[USA-TX]</option>
+                        {% for location in locations %}
+                        <option value="{{ location.location }}">{{ location.location }}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div><br>
@@ -83,11 +108,10 @@
             <hr>
             {% for listing in listings %}
                 <div class="row">
-                    <div class="col-sm-2">
-                        <a href="{{ listing.url }}">View Listing</a>
-                    </div>
-                    <div class="col-sm">
-                        {{ listing.get_location }} {{ listing.get_has }} {{ listing.get_wants }}
+                    <div class="col-sm-9">
+                        <a href="{{ listing.url }}">
+                            {{ listing.get_location }} {{ listing.get_has }} {{ listing.get_wants }}
+                        </a>
                     </div>
                     <div class="col-sm">
                         {{ listing.created_utc }}
