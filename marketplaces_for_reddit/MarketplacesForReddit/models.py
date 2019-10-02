@@ -70,3 +70,9 @@ class Listing(models.Model):
             return 'N/A: Invalid Flair Text'
         else:
             return self.author_flair_text[7:]
+
+class ParsedListing(models.Model):
+    id = models.OneToOneField(Listing, primary_key=True, on_delete=models.CASCADE)
+    location = models.CharField(max_length=10)
+    has = models.CharField(max_length=300)
+    wants = models.CharField(max_length=300)
