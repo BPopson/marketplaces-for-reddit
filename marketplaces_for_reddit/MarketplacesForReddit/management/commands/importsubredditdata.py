@@ -89,7 +89,7 @@ class Command(BaseCommand):
             # We can assume the parsed location is invalid
             # because the default format is supposed to be 
             # [USA-XX] or [XXX] if outside the US
-            if re.match(r'\[([a-zA-Z]{3}|USA-[a-zA-Z]{2})\]', listing.get_location()) is not None:
+            if re.match(r'\[([a-zA-Z]{3}|[a-zA-Z]{3}-[a-zA-Z]{2})\]', listing.get_location()) is not None:
                 parsed_listing.location = listing.get_location()
             else:
                 parsed_listing.location = 'Invalid'
