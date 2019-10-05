@@ -31,7 +31,7 @@ class Listing(models.Model):
         want_location = title.find('[W]')
 
         if have_location == -1 or want_location == -1:
-            return 'N/A'
+            return 'Invalid'
         elif have_location > want_location:
             return self.title[want_location:have_location]
         else:
@@ -43,7 +43,7 @@ class Listing(models.Model):
         want_location = title.find('[W]')
 
         if have_location == -1 or want_location == -1:
-            return 'N/A'
+            return 'Invalid'
         elif have_location > want_location:
             return self.title[have_location:]
         else:
@@ -55,9 +55,9 @@ class Listing(models.Model):
         location_end = title.find(']')
 
         if location_start == -1 or location_end == -1:
-            return 'N/A'
+            return 'Invalid'
         else:
-            return self.title[location_start:location_end+1]
+            return self.title[location_start:location_end+1].replace(" ", "")
 
     def get_number_of_trades(self):
         if self.author_flair_text is None:
@@ -67,7 +67,7 @@ class Listing(models.Model):
         trades_text_location = trades_text.find('TRADES:')
 
         if trades_text_location == -1:
-            return 'N/A: Invalid Flair Text'
+            return 'Invalid'
         else:
             return self.author_flair_text[7:]
 
