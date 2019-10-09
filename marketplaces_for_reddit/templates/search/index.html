@@ -22,7 +22,7 @@
             <select class="custom-select" id="date-range">
                 <option value="1">1 day</option>
                 <option value="3">3 days</option>
-                <option value="7">1 week</option>
+                <option value="7" selected>1 week</option>
                 <option value="14">2 weeks</option>
                 <option value="30">1 month</option>
                 <option value="60">2 months</option>
@@ -37,7 +37,12 @@
                 <option value="greater">greater than</option>
                 <option value="less">less than</option>
             </select>
-            <input class="form-control" type="number" min="0" id="number-of-trades" name="listing-trades-amount">
+            <input class="form-control"
+                   type="number"
+                   min="0"
+                   id="number-of-trades"
+                   name="listing-trades-amount"
+                   placeholder="{{ query_param_trade_amount }}">
         </div>
         <div class="col-sm">
             <label for="listing-type">Listing Type:</label>
@@ -101,4 +106,23 @@
             </div>
         </div>
     {% endfor %}
+    <hr>
+
+    {% for field in search_form %}
+    <div class="form-group row">
+        <div class="col-sm-6">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field|add_class:'form-control' }}
+        </div>
+    </div>
+    {% endfor %}
+
+
+    <span>{{ query_param_date }}</span>
+    <span>{{ query_param_date_within }}</span>
+    <span>{{ query_param_listing_type }}</span>
+    <span>{{ query_param_location }}</span>
+    <span>{{ query_param_payment_types }}</span>
+    <span>{{ query_param_trade_amount }}</span>
+    <span>{{ query_param_trade_sort }}</span>
 {% endblock %}
