@@ -109,12 +109,12 @@
     <hr>
 
     {% for field in search_form %}
-    <div class="form-group row">
-        <div class="col-sm-6">
-          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field|add_class:'form-control' }}
+        <div class="form-group row">
+            <div class="col-sm-6">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
         </div>
-    </div>
     {% endfor %}
 
 
