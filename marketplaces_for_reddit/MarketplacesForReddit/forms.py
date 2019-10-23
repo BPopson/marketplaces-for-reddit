@@ -16,16 +16,38 @@ class SearchForm(forms.Form):
                        ('buying', 'Buying'),
                        ('trading', 'Trading'),
                        ('closed', 'Closed')]
-    TRADE_COUNT_FILTERS = [('gt', 'Greater Than'), ('lt', 'Less Than')]
-    PAYMENT_TYPES = [('paypal', 'PayPal'), ('cash', 'Local Cash'), ('other', 'Other')]
+    TRADE_COUNT_FILTERS = [('gt', 'Greater Than'),
+                           ('lt', 'Less Than')]
+    PAYMENT_TYPES = [('paypal', 'PayPal'),
+                     ('cash', 'Local Cash'),
+                     ('other', 'Other')]
 
-    search = forms.CharField(label='Search')
-    search_title_only = forms.BooleanField(label='Search Title Only')
-    location = forms.MultipleChoiceField(label='Locations', choices=LOCATION_CHOICES)
-    date_within = forms.ChoiceField(label='Date Within', choices=DATE_WITHIN_CHOICES)
-    date = forms.DateField(label='Date')
-    number_of_trades = forms.IntegerField()
-    number_of_trades_filter = forms.ChoiceField(choices=TRADE_COUNT_FILTERS)
-    listing_type = forms.MultipleChoiceField(label='Listing Type', choices=LISTING_CHOICES)
-    payment_type = forms.MultipleChoiceField(choices=PAYMENT_TYPES)
+    search = forms.CharField(label='Search',
+                             required=False)
+    search_title_only = forms.BooleanField(label='Search Title Only',
+                                           required=False)
+    location = forms.MultipleChoiceField(label='Locations',
+                                         choices=LOCATION_CHOICES,
+                                         required=False)
+    date_within = forms.ChoiceField(label='Date Within',
+                                    choices=DATE_WITHIN_CHOICES,
+                                    initial=14,
+                                    required=False)
+    date = forms.DateField(label='Date',
+                           required=False)
+    number_of_trades = forms.IntegerField(required=False)
+    number_of_trades_filter = forms.ChoiceField(choices=TRADE_COUNT_FILTERS,
+                                                required=False)
+    listing_type = forms.MultipleChoiceField(label='Listing Type',
+                                             choices=LISTING_CHOICES,
+                                             required=False)
+    payment_type = forms.MultipleChoiceField(choices=PAYMENT_TYPES,
+                                             required=False)
 
+    def __init__(self, *args, **kwargs):
+        super(SearchForm, self).__init__(*args, **kwargs)
+        # Add form-control for bootstrap to all visible fields
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        # TODO: See about moving this out of the constructor for this form
+        self.fields['search_title_only'].widget.attrs['class'] = 'form-check-input'
