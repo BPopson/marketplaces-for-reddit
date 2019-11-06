@@ -1,1 +1,1 @@
-web: gunicorn marketplaces-for-reddit.wsgi
+web: gunicorn marketplaces_for_reddit.wsgi
