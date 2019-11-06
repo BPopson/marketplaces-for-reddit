@@ -1,5 +1,11 @@
 from datetime import date, datetime, timedelta
 
+from django.shortcuts import render, get_list_or_404
+import operator
+
+from datetime import date, timedelta
+from functools import reduce
+
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -66,5 +72,53 @@ def search(request):
     context['search_form'] = search_form
     context['listings'] = listings[0:25]
     context['locations'] = parsed_listings_locations
+
+    search_params = {}
+
+    if search_form.is_valid():
+        search_params = {
+            'search': search_form.cleaned_data['search'],
+            'search_title_only': search_form.cleaned_data['search_title_only'],
+            'location': search_form.cleaned_data['location'],
+            'listing_type': search_form.cleaned_data['listing_type'],
+            'payment_type': search_form.cleaned_data['payment_type'],
+            'date': search_form.cleaned_data['date'],
+            'date_within': int(search_form.cleaned_data['date_within']),
+            'number_of_trades': int(search_form.cleaned_data['number_of_trades']),
+            'number_of_trades_filter': search_form.cleaned_data['number_of_trades_filter'],
+        }
+    else:
+        return HttpResponseRedirect('/')
+
+    # parsed_listings_locations = ParsedListing.objects.values('location') \
+    #     .distinct().order_by('location')
+    listings = Listing.objects \
+                    .filter(reduce(operator.or_, \
+                        (Q(link_flair_text__icontains=x) for x in search_params['listing_type']))) \
+                    .filter(reduce(operator.or_, \
+                        (Q(title__icontains=x) for x in search_params['payment_type']))) \
+                    .filter(reduce(operator.or_, \
+                        (Q(title__icontains=x) for x in search_params['location']))) \
+                    .filter(created_utc__gte=search_params['date'], \
+                            created_utc__lt=search_params['date']
+                            + timedelta(days=search_params['date_within'])) \
+
+    if search_params['search_title_only']:
+        listings = listings.filter(title__icontains=search_params['search'])
+    else:
+        listings = listings.filter(Q(title__icontains=search_params['search']) \
+                                   | Q(selftext__icontains=search_params['search']))
+
+    # if search_params['number_of_trades_filter'] == 'gt'
+    #     listings = listings.filter()
+    # elif:
+
+
+    listings = listings.order_by('-created_utc')
+
+    context['SEARCH_PARAMS'] = search_params
+    context['search_form'] = search_form
+    context['listings'] = listings[0:25]
+    # context['locations'] = parsed_listings_locations
 
     return render(request, 'search/index.html', context)
