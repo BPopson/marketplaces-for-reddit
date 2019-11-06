@@ -62,12 +62,12 @@
     <h2>New Listings...</h2>
     <hr>
     {% for listing in listings %}
-        <div class="row">
+        <div class="row row-spacer">
             <div class="col-sm-1">
                 {{ listing.link_flair_text }}
             </div>
             <div class="col-sm-9">
-                <a href="{{ listing.url }}">
+                <a href="{{ listing.url }}" target="_blank" rel="noopener noreferrer">
                     {{ listing.get_location }} {{ listing.get_has }} {{ listing.get_wants }}
                 </a>
             </div>
