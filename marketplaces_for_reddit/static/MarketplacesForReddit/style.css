@@ -4,10 +4,6 @@ body {
     color: #5a5a5a;
 }
 
-.search {
-    width: 100%;
-}
-
-.search-btn {
-    float: right;
+.row-spacer {
+    padding-bottom: 0.5rem;
 }

@@ -1,103 +1,78 @@
 {% extends 'base/base.html' %}
+{% load humanize %}
 {% block content %}
     <h1>Search</h1>
-    <button type="submit" class="btn btn-primary search-btn">Search</button>
-    <div style="overflow: hidden; padding-right: .5em;">
-        <input class="form-control" formmethod="get" type="search" placeholder="Search..."><br>
-    </div>
-
-    <h4>Listing Filters</h4>
     <hr>
     <div class="row">
-        <div class="col-sm">
-                <label for="date-range">Location:</label>
-                <select class="custom-select" id="date-range" multiple>
-                    {% for location in locations %}
-                    <option value="{{ location.location }}">{{ location.location }}</option>
-                    {% endfor %}
-                </select>
+        {{ search_form.non_field_errors }}
+    </div>
+    <form action="/search/" method="GET">  
+        <div class="form-group row">
+            <div class="col-sm-9">    
+                {{ search_form.search.errors }}
+                {{ search_form.search }} 
             </div>
-        <div class="col-sm">
-            <label for="date-range">Date within:</label>
-            <select class="custom-select" id="date-range">
-                <option value="1">1 day</option>
-                <option value="3">3 days</option>
-                <option value="7">1 week</option>
-                <option value="14">2 weeks</option>
-                <option value="30">1 month</option>
-                <option value="60">2 months</option>
-                <option value="180">6 months</option>
-                <option value="365">1 year</option>
-            </select>
-            <input class="form-control" type="date" id="date" name="listing-date">
-        </div>
-        <div class="col-sm">
-            <label for="trade-range-type">Number of Trades:</label>
-            <select class="custom-select" id="trade-range-type" name="listing-trades-range-type">
-                <option value="greater">greater than</option>
-                <option value="less">less than</option>
-            </select>
-            <input class="form-control" type="number" min="0" id="number-of-trades" name="listing-trades-amount">
-        </div>
-        <div class="col-sm">
-            <label for="listing-type">Listing Type:</label>
-            <div id="listing-type">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="listing-type" id="exampleRadios2" value="selling" checked>
-                    <label class="form-check-label" for="exampleRadios2">
-                        Selling
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="listing-type" id="exampleRadios1" value="buying">
-                    <label class="form-check-label" for="exampleRadios1">
-                        Buying
-                    </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="listing-type" id="listing-type-trading" value="trading">
-                  <label class="form-check-label" for="listing-type-trading">
-                      Trading
-                  </label>
-                </div>
+            <div class="col-sm-1">
+                <input class="btn btn-primary" type="submit" value="Search">
             </div>
+            <div class="col-sm-2">    
+                    {{ search_form.search_title_only.errors }}
+                    <div class="form-check">
+                        {{ search_form.search_title_only }}
+                        <label
+                            class="form-check-label"
+                            for="{{ search_form.search_title_only.id_for_label }}">
+                            Search title only
+                        </label>
+                    </div>
+                </div>
         </div>
-        <div class="col-sm">
-            <label for="listing-type">Payment Type:</label>
-            <div id="listing-type">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="listing-type" id="listing-payment-paypal" value="selling" checked>
-                    <label class="form-check-label" for="listing-payment-paypal">
-                        PayPal
-                    </label>
+        <div class="form-group row">
+            <div class="col-sm">    
+                {{ search_form.location.errors }}
+                {{ search_form.location.label_tag }}
+                {{ search_form.location }}
+            </div>
+            <div class="col-sm">
+                    {{ search_form.listing_type.errors }}
+                    {{ search_form.listing_type.label_tag }}
+                    {{ search_form.listing_type }}
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="listing-type" id="listing-payment-localcash" value="buying">
-                    <label class="form-check-label" for="listing-payment-localcash">
-                        Local Cash
-                    </label>
+                <div class="col-sm">
+                    {{ search_form.payment_type.errors }}
+                    {{ search_form.payment_type.label_tag }}
+                    {{ search_form.payment_type }}
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="listing-type" id="listing-payment-other" value="trading">
-                    <label class="form-check-label" for="listing-payment-other">
-                        Other
-                    </label>
-                </div>
+            <div class="col-sm">    
+                {{ search_form.date_within.errors }}
+                {{ search_form.date.errors }}
+                {{ search_form.date_within.label_tag }}
+                {{ search_form.date_within }}
+                {{ search_form.date }}
+            </div>
+            <div class="col-sm">    
+                {{ search_form.number_of_trades.errors }}
+                {{ search_form.number_of_trades_filter.errors }}
+                {{ search_form.number_of_trades.label_tag }}
+                {{ search_form.number_of_trades_filter }}
+                {{ search_form.number_of_trades }}
             </div>
         </div>
-    </div><br>
-
+    </form>
     <h2>New Listings...</h2>
     <hr>
     {% for listing in listings %}
-        <div class="row">
+        <div class="row row-spacer">
+            <div class="col-sm-1">
+                {{ listing.link_flair_text }}
+            </div>
             <div class="col-sm-9">
-                <a href="{{ listing.url }}">
+                <a href="{{ listing.url }}" target="_blank" rel="noopener noreferrer">
                     {{ listing.get_location }} {{ listing.get_has }} {{ listing.get_wants }}
                 </a>
             </div>
-            <div class="col-sm">
-                {{ listing.created_utc }}
+            <div class="col-sm-2">
+                {{ listing.created_utc|naturaltime }}
             </div>
         </div>
     {% endfor %}
