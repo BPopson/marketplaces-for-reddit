@@ -28,21 +28,21 @@ class SearchForm(forms.Form):
                                            required=False)
     location = forms.MultipleChoiceField(label='Locations',
                                          choices=LOCATION_CHOICES,
-                                         required=False)
+                                         required=True)
     date_within = forms.ChoiceField(label='Date Within',
                                     choices=DATE_WITHIN_CHOICES,
                                     initial=14,
-                                    required=False)
+                                    required=True)
     date = forms.DateField(label='Date',
                            required=False)
-    number_of_trades = forms.IntegerField(required=False)
+    number_of_trades = forms.IntegerField(required=True)
     number_of_trades_filter = forms.ChoiceField(choices=TRADE_COUNT_FILTERS,
                                                 required=False)
     listing_type = forms.MultipleChoiceField(label='Listing Type',
                                              choices=LISTING_CHOICES,
-                                             required=False)
+                                             required=True)
     payment_type = forms.MultipleChoiceField(choices=PAYMENT_TYPES,
-                                             required=False)
+                                             required=True)
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
