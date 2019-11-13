@@ -1,6 +1,8 @@
 import string
+import uuid
 
 from django.contrib.postgres.fields import JSONField
+from django.contrib.sessions.models import Session
 from django.db import models
 
 
@@ -76,3 +78,19 @@ class ParsedListing(models.Model):
     location = models.CharField(max_length=10)
     has = models.CharField(max_length=300)
     wants = models.CharField(max_length=300)
+
+class SearchLog(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    search_text = models.CharField(max_length=300)
+    search_title_only = models.BooleanField()
+    location = models.CharField(max_length=300)
+    date = models.DateField()
+    date_within = models.IntegerField()
+    trade_amount = models.IntegerField()
+    trade_sort = models.CharField(max_length=10)
+    listing_type = models.CharField(max_length=300)
+    payment_type = models.CharField(max_length=300)
+    ip_address = models.GenericIPAddressField()
+    user_agent = models.CharField(max_length=500)
+    query_string = models.CharField(max_length=500)
+    session_id = models.ForeignKey(Session, null=True, on_delete=models.SET_NULL)
