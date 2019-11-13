@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Listing, ParsedListing
+from .models import Listing, ParsedListing, SearchLog
 
 
 class ListingAdmin(admin.ModelAdmin):
@@ -12,7 +12,7 @@ class ParsedListingAdmin(admin.ModelAdmin):
     list_display = ('id', 'location', 'has', 'wants')
     list_filter = ['location']
 
-
 # Register your models here.
 admin.site.register(Listing, ListingAdmin)
 admin.site.register(ParsedListing, ParsedListingAdmin)
+admin.site.register(SearchLog)
