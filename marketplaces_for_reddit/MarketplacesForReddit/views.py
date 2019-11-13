@@ -17,6 +17,10 @@ from .forms import SearchForm
 # Home Page/Index View
 def index(request):
     context = {}
+
+    if not request.session.exists(request.session.session_key):
+        request.session.create() 
+
     listings = Listing.objects.order_by('-created_utc')
     parsed_listings_locations = ParsedListing.objects.values('location') \
         .distinct().order_by('location')
@@ -34,6 +38,9 @@ def index(request):
 # Search View
 def search(request):
     context = {}
+
+    if not request.session.exists(request.session.session_key):
+        request.session.create()
 
     search_form = SearchForm(request.GET)
 
