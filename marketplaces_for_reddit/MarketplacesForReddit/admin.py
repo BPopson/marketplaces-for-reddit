@@ -12,7 +12,10 @@ class ParsedListingAdmin(admin.ModelAdmin):
     list_display = ('id', 'location', 'has', 'wants')
     list_filter = ['location']
 
+class SearchLogAdmin(admin.ModelAdmin):
+    list_display = ('session_id', 'timestamp', 'query_search_text', 'query_location', 'query_date', 'query_date_within', 'query_payment_type', 'query_listing_type')
+
 # Register your models here.
 admin.site.register(Listing, ListingAdmin)
 admin.site.register(ParsedListing, ParsedListingAdmin)
-admin.site.register(SearchLog)
+admin.site.register(SearchLog, SearchLogAdmin)
