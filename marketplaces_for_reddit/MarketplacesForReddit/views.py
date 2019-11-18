@@ -99,9 +99,8 @@ def search(request):
                         (Q(title__icontains=x) for x in search_params['payment_type']))) \
                     .filter(reduce(operator.or_, \
                         (Q(title__icontains=x) for x in search_params['location']))) \
-                    .filter(created_utc__gte=search_params['date'], \
-                            created_utc__lt=search_params['date']
-                            + timedelta(days=search_params['date_within'])) \
+                    .filter(created_utc__gte=search_params['date'] - timedelta(days=search_params['date_within']), \
+                            created_utc__lte=search_params['date'])
 
     if search_params['search_title_only']:
         listings = listings.filter(title__icontains=search_params['search'])
