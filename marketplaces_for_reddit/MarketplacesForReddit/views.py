@@ -83,7 +83,7 @@ def search(request):
                     .filter(reduce(operator.or_, \
                         (Q(title__icontains=x) for x in search_params['location']))) \
                     .filter(created_utc__gte=search_params['date'] - timedelta(days=search_params['date_within']), \
-                            created_utc__lte=search_params['date'])
+                            created_utc__lte=search_params['date'] + timedelta(days=search_params['date_within']))
 
     if search_params['search']:
         if search_params['search_title_only']:
