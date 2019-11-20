@@ -121,18 +121,18 @@ def search(request):
                         (Q(title__icontains=x) for x in search_params['location']))) \
                     .filter(created_utc__gte=search_params['date'] - timedelta(days=search_params['date_within']), \
                             created_utc__lte=search_params['date'])
-
-    if search_params['search_title_only']:
-        vector = SearchVector('title')
-        query = SearchQuery(search_params['search'])
-        # listings = listings.filter(title__icontains=search_params['search'])
-        listings = listings.annotate(search=vector).filter(search=query)
-    else:
-        vector = SearchVector('title', 'selftext')
-        query = SearchQuery(search_params['search'])
-        listings = listings.annotate(search=vector).filter(search=query)
-        # listings = listings.filter(Q(title__icontains=search_params['search']) \
-        #                           | Q(selftext__icontains=search_params['search']))
+    if search_params['search']:
+        if search_params['search_title_only']:
+            vector = SearchVector('title')
+            query = SearchQuery(search_params['search'])
+            # listings = listings.filter(title__icontains=search_params['search'])
+            listings = listings.annotate(search=vector).filter(search=query)
+        else:
+            vector = SearchVector('title', 'selftext')
+            query = SearchQuery(search_params['search'])
+            listings = listings.annotate(search=vector).filter(search=query)
+            # listings = listings.filter(Q(title__icontains=search_params['search']) \
+            #                           | Q(selftext__icontains=search_params['search']))
         
 
     # if search_params['number_of_trades_filter'] == 'gt'
