@@ -1,17 +1,14 @@
-from datetime import date, datetime, timedelta
-
-from django.shortcuts import render, get_list_or_404
 import operator
-
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from functools import reduce
 
+from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import get_list_or_404, render
 
-from .models import Listing, ParsedListing, SearchLog
 from .forms import SearchForm
+from .models import Listing, ParsedListing, SearchLog
 
 
 # Home Page/Index View
@@ -126,10 +123,17 @@ def search(request):
                             created_utc__lte=search_params['date'])
 
     if search_params['search_title_only']:
-        listings = listings.filter(title__icontains=search_params['search'])
+        vector = SearchVector('title')
+        query = SearchQuery(search_params['search'])
+        # listings = listings.filter(title__icontains=search_params['search'])
+        listings = listings.annotate(search=vector).filter(search=query)
     else:
-        listings = listings.filter(Q(title__icontains=search_params['search']) \
-                                   | Q(selftext__icontains=search_params['search']))
+        vector = SearchVector('title', 'selftext')
+        query = SearchQuery(search_params['search'])
+        listings = listings.annotate(search=vector).filter(search=query)
+        # listings = listings.filter(Q(title__icontains=search_params['search']) \
+        #                           | Q(selftext__icontains=search_params['search']))
+        
 
     # if search_params['number_of_trades_filter'] == 'gt'
     #     listings = listings.filter()
