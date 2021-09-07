@@ -1,6 +1,5 @@
 import re
 from datetime import datetime
-from pprint import pprint
 
 import praw
 from django.core.management.base import BaseCommand
@@ -63,7 +62,6 @@ class Command(BaseCommand):
             submissions = subreddit.top(limit=limit)
 
         for submission in submissions:
-            # pprint(vars(submission))
             listing = Listing()
             parsed_listing = ParsedListing()
             listing.id = submission.id
@@ -96,8 +94,6 @@ class Command(BaseCommand):
 
             parsed_listing.has = listing.get_has()
             parsed_listing.wants = listing.get_wants()
-            # pprint(vars(listing))
-            # pprint(vars(parsed_listing))
             listing.save()
             parsed_listing.save()
 

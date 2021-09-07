@@ -1,7 +1,5 @@
-import string
 import uuid
 
-from django.contrib.postgres.fields import JSONField
 from django.db import models
 
 
@@ -58,7 +56,7 @@ class Listing(models.Model):
         if location_start == -1 or location_end == -1:
             return 'Invalid'
         else:
-            return self.title[location_start:location_end+1].replace(" ", "")
+            return self.title[location_start:location_end + 1].replace(" ", "")
 
     def get_number_of_trades(self):
         if self.author_flair_text is None:
@@ -72,11 +70,13 @@ class Listing(models.Model):
         else:
             return self.author_flair_text[7:]
 
+
 class ParsedListing(models.Model):
     id = models.OneToOneField(Listing, primary_key=True, on_delete=models.CASCADE)
     location = models.CharField(max_length=10)
     has = models.CharField(max_length=300)
     wants = models.CharField(max_length=300)
+
 
 class SearchLog(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -94,4 +94,3 @@ class SearchLog(models.Model):
     query_trade_sort = models.CharField(max_length=10)
     query_listing_type = models.CharField(max_length=300)
     query_payment_type = models.CharField(max_length=300)
-    

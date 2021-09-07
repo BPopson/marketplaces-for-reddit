@@ -1,11 +1,11 @@
 import operator
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from functools import reduce
 
 from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_list_or_404, render
+from django.shortcuts import render
 
 from .forms import SearchForm
 from .models import Listing, ParsedListing, SearchLog
@@ -16,7 +16,7 @@ def index(request):
     context = {}
 
     if not request.session.exists(request.session.session_key):
-        request.session.create() 
+        request.session.create()
 
     listings = Listing.objects.order_by('-created_utc')
     parsed_listings_locations = ParsedListing.objects.values('location') \
@@ -31,6 +31,7 @@ def index(request):
     context['search_form'] = search_form
 
     return render(request, 'home/index.html', context)
+
 
 # Search View
 def search(request):
@@ -76,14 +77,13 @@ def search(request):
     # parsed_listings_locations = ParsedListing.objects.values('location') \
     #     .distinct().order_by('location')
     listings = Listing.objects \
-                    .filter(reduce(operator.or_, \
-                        (Q(link_flair_text__icontains=x) for x in search_params['listing_type']))) \
-                    .filter(reduce(operator.or_, \
-                        (Q(title__icontains=x) for x in search_params['payment_type']))) \
-                    .filter(reduce(operator.or_, \
-                        (Q(title__icontains=x) for x in search_params['location']))) \
-                    .filter(created_utc__gte=search_params['date'] - timedelta(days=search_params['date_within']), \
-                            created_utc__lte=search_params['date'] + timedelta(days=search_params['date_within']))
+        .filter(reduce(operator.or_,
+                       (Q(link_flair_text__icontains=x) for x in search_params['listing_type']))) \
+        .filter(reduce(operator.or_,
+                       (Q(title__icontains=x) for x in search_params['payment_type']))) \
+        .filter(reduce(operator.or_, (Q(title__icontains=x) for x in search_params['location']))) \
+        .filter(created_utc__gte=search_params['date'] - timedelta(days=search_params['date_within']),
+                created_utc__lte=search_params['date'] + timedelta(days=search_params['date_within']))
 
     if search_params['search']:
         if search_params['search_title_only']:
