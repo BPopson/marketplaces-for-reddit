@@ -18,7 +18,7 @@ def index(request):
     if not request.session.exists(request.session.session_key):
         request.session.create()
 
-    listings = Listing.objects.order_by('-created_utc')
+    listings = Listing.objects.filter(subreddit__iexact='hardwareswap').order_by('-created_utc')
     parsed_listings_locations = ParsedListing.objects.values('location') \
         .distinct().order_by('location')
     search_form = SearchForm(initial={
@@ -76,7 +76,7 @@ def search(request):
 
     # parsed_listings_locations = ParsedListing.objects.values('location') \
     #     .distinct().order_by('location')
-    listings = Listing.objects \
+    listings = Listing.objects.filter(subreddit__iexact='hardwareswap') \
         .filter(reduce(operator.or_,
                        (Q(link_flair_text__icontains=x) for x in search_params['listing_type']))) \
         .filter(reduce(operator.or_,
