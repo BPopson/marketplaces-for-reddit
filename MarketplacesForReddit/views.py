@@ -19,14 +19,14 @@ def index(request):
         request.session.create()
 
     listings = Listing.objects.filter(subreddit__iexact='hardwareswap').order_by('-created_utc')
-    parsed_listings_locations = ParsedListing.objects.values('location') \
-        .distinct().order_by('location')
+    # parsed_listings_locations = ParsedListing.objects.values('location') \
+    #     .distinct().order_by('location')
     search_form = SearchForm(initial={
         'date': date.today().strftime('%Y-%m-%d'),
         'number_of_trades': 0})
 
     context['listings'] = listings[0:10]
-    context['locations'] = parsed_listings_locations
+    # context['locations'] = parsed_listings_locations
 
     context['search_form'] = search_form
 
